@@ -11,32 +11,37 @@ class MyFlutterMaps extends GetView<MyFlutterMapsController> {
   Widget build(BuildContext context) => Obx(
         () => controller.loadingLocation
             ? const SizedBox()
-            : FlutterMap(
-                options: MapOptions(
-                  initialCenter:
-                      controller.currentPosition, // Center the map over London
-                  initialZoom: 15.0,
+            : GetBuilder<MyFlutterMapsController>(
+                builder: (builder) => FlutterMap(
+                  options: MapOptions(
+                    initialCenter: controller
+                        .currentPosition, // Center the map over London
+                    initialZoom: 15.0,
+                  ),
+                  children: [
+                    TileLayer(
+                      // Display map tiles from any source
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // OSMF's Tile Server
+                      userAgentPackageName: 'com.example.app',
+                      // And many more recommended properties!
+                    ),
+                    MarkerLayer(
+                      markers: controller.markers,
+                    ),
+                    RichAttributionWidget(
+                      // Include a stylish prebuilt attribution widget that meets all requirments
+                      attributions: [
+                        TextSourceAttribution(
+                          'OpenStreetMap contributors',
+                          onTap: () => launchUrl(Uri.parse(
+                              'https://openstreetmap.org/copyright')), // (external)
+                        ),
+                        // Also add images...
+                      ],
+                    ),
+                  ],
                 ),
-                children: [
-                  TileLayer(
-                    // Display map tiles from any source
-                    urlTemplate:
-                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // OSMF's Tile Server
-                    userAgentPackageName: 'com.example.app',
-                    // And many more recommended properties!
-                  ),
-                  RichAttributionWidget(
-                    // Include a stylish prebuilt attribution widget that meets all requirments
-                    attributions: [
-                      TextSourceAttribution(
-                        'OpenStreetMap contributors',
-                        onTap: () => launchUrl(Uri.parse(
-                            'https://openstreetmap.org/copyright')), // (external)
-                      ),
-                      // Also add images...
-                    ],
-                  ),
-                ],
               ),
       );
 }

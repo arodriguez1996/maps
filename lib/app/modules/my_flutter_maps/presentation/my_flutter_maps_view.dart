@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:maps/app/modules/my_flutter_maps/presentation/controllers/my_flutter_maps_controller.dart';
 import 'package:maps/app/modules/my_flutter_maps/presentation/widgets/my_flutter_maps.dart';
 
-class MyFlutterMapsView extends StatelessWidget {
+class MyFlutterMapsView extends GetView<MyFlutterMapsController> {
   const MyFlutterMapsView({super.key});
 
   @override
@@ -13,8 +14,32 @@ class MyFlutterMapsView extends StatelessWidget {
             onPressed: () => Get.back(),
           ),
         ),
-        body: const Center(
-          child: MyFlutterMaps(),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 400.0,
+                child: MyFlutterMaps(),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              TextField(
+                controller: controller.searchController,
+                decoration: const InputDecoration(
+                  hintText: 'Search any location',
+                  prefixIcon: Icon(Icons.search),
+                ),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              ElevatedButton(
+                onPressed: () => controller.search(),
+                child: const Text('search'),
+              )
+            ],
+          ),
         ),
       );
 }
